@@ -1,0 +1,12 @@
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/kynan/nbstripout   # ← correct owner
+    rev: 0.8.1                                  # latest release tag
+    hooks:
+      - id: nbstripout
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
