@@ -6,7 +6,6 @@ import requests
 from pypdf import PdfReader
 import gradio as gr
 
-
 load_dotenv(override=True)
 
 def push(text):
@@ -77,14 +76,14 @@ class Me:
 
     def __init__(self):
         self.openai = OpenAI()
-        self.name = "Ed Donner"
-        reader = PdfReader("me/linkedin.pdf")
+        self.name = "Cristian Martinez"
+        reader = PdfReader("cristian/linkedin.pdf")
         self.linkedin = ""
         for page in reader.pages:
             text = page.extract_text()
             if text:
                 self.linkedin += text
-        with open("me/summary.txt", "r", encoding="utf-8") as f:
+        with open("cristian/summary.txt", "r", encoding="utf-8") as f:
             self.summary = f.read()
 
 
@@ -98,7 +97,7 @@ class Me:
             result = tool(**arguments) if tool else {}
             results.append({"role": "tool","content": json.dumps(result),"tool_call_id": tool_call.id})
         return results
-    
+
     def system_prompt(self):
         system_prompt = f"You are acting as {self.name}. You are answering questions on {self.name}'s website, \
 particularly questions related to {self.name}'s career, background, skills and experience. \
@@ -111,7 +110,7 @@ If the user is engaging in discussion, try to steer them towards getting in touc
         system_prompt += f"\n\n## Summary:\n{self.summary}\n\n## LinkedIn Profile:\n{self.linkedin}\n\n"
         system_prompt += f"With this context, please chat with the user, always staying in character as {self.name}."
         return system_prompt
-    
+
     def chat(self, message, history):
         messages = [{"role": "system", "content": self.system_prompt()}] + history + [{"role": "user", "content": message}]
         done = False
@@ -126,9 +125,8 @@ If the user is engaging in discussion, try to steer them towards getting in touc
             else:
                 done = True
         return response.choices[0].message.content
-    
+
 
 if __name__ == "__main__":
     me = Me()
     gr.ChatInterface(me.chat, type="messages").launch()
-    
